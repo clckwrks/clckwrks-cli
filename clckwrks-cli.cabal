@@ -20,4 +20,4 @@ Executable clckwrks-cli
      acid-state == 0.7.*,
      base        < 5,
      clckwrks   == 0.12.*,
-     network    == 2.3.*
+     network    == 2.4.*

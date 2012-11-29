@@ -19,7 +19,7 @@ Executable clckwrks-cli
   Build-depends:
      acid-state >= 0.7 && < 0.9,
      base        < 5,
-     clckwrks   == 0.12.*,
+     clckwrks   >= 0.12 && < 0.14,
      haskeline  == 0.7.*,
      mtl        >= 2.0 && < 2.2,
      network    >= 2.3 && < 2.5,

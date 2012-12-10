@@ -1,16 +1,16 @@
 Name:                clckwrks-cli
 Version:             0.2.0
 Synopsis:            a command-line interface for adminstrating some aspects of clckwrks
--- Description:
+Description:         This tool permits browsing of users, changing their roles, and other features.
 Homepage:            http://www.clckwrks.com/
 License:             BSD3
 License-file:        LICENSE
 Author:              Jeremy Shaw
 Maintainer:          jeremy@n-heptane.com
-Copyright:           2012 SeeReason Partners LLC
+Copyright:           2012 Jeremy Shaw, SeeReason Partners LLC
 Category:            Clckwrks
 Build-type:          Custom
-Cabal-version:       >=1.2
+Cabal-version:       >=1.6
 
 Executable clckwrks-cli
   Main-is:

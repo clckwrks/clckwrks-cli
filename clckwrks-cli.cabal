@@ -12,6 +12,11 @@ Category:            Clckwrks
 Build-type:          Custom
 Cabal-version:       >=1.6
 
+source-repository head
+    type:     darcs
+    subdir:   clckwrks-cli
+    location: http://hub.darcs.net/stepcut/clckwrks
+
 Executable clckwrks-cli
   Main-is:
      Main.hs

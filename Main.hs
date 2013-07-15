@@ -7,7 +7,7 @@ import Clckwrks.ProfileData.Types (Role(..))
 import Control.Monad.Reader
 import Data.Acid (AcidState)
 import Data.Acid.Advanced (query', update')
-import Data.Acid.Remote (openRemoteState)
+import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
 import Network (PortID(UnixSocket))
 import System.Environment
 import System.Console.Haskeline
@@ -31,7 +31,7 @@ main =
     do args <- getArgs
        case args of
          [socket] ->
-             do acid <- openRemoteState "localhost" (UnixSocket socket)
+             do acid <- openRemoteState skipAuthenticationPerform "localhost" (UnixSocket socket)
                 putStrLn "type 'help' for a list of commands."
                 runReaderT (runInputT defaultSettings loop) acid
          _ -> putStrLn "Usage: clckwrks-cli path/to/profileData_socket"

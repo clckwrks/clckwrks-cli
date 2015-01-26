@@ -126,10 +126,8 @@ execCommand (User UCList) =
        return ()
 execCommand (User (UCShow uid)) =
     do a <- ask
-       mpd <- query' a (GetProfileData uid)
-       case mpd of
-         Nothing   -> lift $ putStrLn $ "Invalid userid."
-         (Just pd) -> lift $ print pd
+       pd <- query' a (GetProfileData uid)
+       lift $ print pd
 execCommand (User (UCAddRole uid role)) =
     do a <- ask
        update' a (AddRole uid role)

@@ -1,5 +1,5 @@
 Name:                clckwrks-cli
-Version:             0.2.16
+Version:             0.2.17
 Synopsis:            a command-line interface for adminstrating some aspects of clckwrks
 Description:         This tool permits browsing of users, changing their roles, and other features.
 Homepage:            http://www.clckwrks.com/
@@ -9,8 +9,9 @@ Author:              Jeremy Shaw
 Maintainer:          jeremy@n-heptane.com
 Copyright:           2012 Jeremy Shaw, SeeReason Partners LLC
 Category:            Clckwrks
-Build-type:          Custom
-Cabal-version:       >=1.6
+Build-type:          Simple
+Cabal-version:       >=1.10
+tested-with:         GHC == 7.6.3, GHC == 7.8.4, GHC == 7.10.3, GHC == 8.0.1
 
 source-repository head
     type:     git
@@ -19,7 +20,7 @@ source-repository head
 Executable clckwrks-cli
   Main-is:
      Main.hs
-
+  Default-Language: Haskell2010
   Build-depends:
      acid-state >= 0.12 && < 0.15,
      base        < 5,

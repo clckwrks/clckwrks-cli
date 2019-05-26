@@ -1,5 +1,5 @@
 Name:                clckwrks-cli
-Version:             0.2.17.2
+Version:             0.2.17.3
 Synopsis:            a command-line interface for adminstrating some aspects of clckwrks
 Description:         This tool permits browsing of users, changing their roles, and other features.
 Homepage:            http://www.clckwrks.com/

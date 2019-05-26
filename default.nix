@@ -3,7 +3,7 @@
 }:
 mkDerivation {
   pname = "clckwrks-cli";
-  version = "0.2.14";
+  version = "0.2.17.1";
   src = ./.;
   isLibrary = false;
   isExecutable = true;

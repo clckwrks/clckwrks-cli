@@ -1,5 +1,5 @@
 Name:                clckwrks-cli
-Version:             0.2.17.5
+Version:             0.3.0
 Synopsis:            a command-line interface for adminstrating some aspects of clckwrks
 Description:         This tool permits browsing of users, changing their roles, and other features.
 Homepage:            http://www.clckwrks.com/
@@ -17,6 +17,21 @@ source-repository head
     type:     git
     location: git://github.com/clckwrks/clckwrks-cli.git
 
+Library
+  default-language: Haskell2010
+  Exposed-Modules: Clckwrks.CLI.Core
+                   Clckwrks.CLI.ProfileData
+  Build-depends:
+     acid-state >= 0.12 && < 0.16,
+     base        < 5,
+     clckwrks   >= 0.23 && < 0.26,
+     containers >= 0.6 && < 0.7,
+     haskeline  == 0.7.*,
+     filepath >= 1.4 && < 1.5,
+     mtl        >= 2.0 && < 2.3,
+     network    >= 2.3 && < 3.2,
+     parsec     == 3.1.*
+
 Executable clckwrks-cli
   Main-is:
      Main.hs
@@ -25,7 +40,10 @@ Executable clckwrks-cli
      acid-state >= 0.12 && < 0.16,
      base        < 5,
      clckwrks   >= 0.23 && < 0.26,
+     clckwrks-cli >= 0.3 && < 0.4,
+     containers >= 0.6 && < 0.7,
      haskeline  == 0.7.*,
+     filepath >= 1.4 && < 1.5,
      mtl        >= 2.0 && < 2.3,
      network    >= 2.3 && < 3.2,
      parsec     == 3.1.*

@@ -10,7 +10,6 @@ import Data.Acid.Advanced (query', update')
 import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
 import           Data.Map (Map)
 import qualified Data.Map as Map
-import Network (PortID(UnixSocket))
 import System.Environment
 import System.Exit (exitSuccess)
 import System.Console.Haskeline

@@ -1,0 +1,7 @@
+*~
+result
+.cabal-sandbox
+_state
+dist
+dist-newstyle
+cabal.sandbox.config

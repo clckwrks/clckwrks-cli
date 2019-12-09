@@ -1,3 +1,4 @@
+{-# language CPP #-}
 module Clckwrks.CLI.ProfileData where
 
 import Control.Applicative ((<$>), (<*>), (*>), pure)
@@ -8,8 +9,14 @@ import Clckwrks.ProfileData.Types (Role(..))
 import Control.Monad.Reader
 import Data.Acid (AcidState)
 import Data.Acid.Advanced (query', update')
-import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
+
+#if MIN_VERSION_network(3,0,0)
+import Network.Socket (SockAddr(..))
+import Data.Acid.Remote (openRemoteStateSockAddr, skipAuthenticationPerform)
+#else
 import Network (PortID(UnixSocket))
+import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
+#endif
 import System.Environment
 import System.FilePath ((</>))
 import System.Console.Haskeline
@@ -108,7 +115,11 @@ execUserCommand (UCRemoveRole uid role) =
 
 initUserCommand :: FilePath -> IO (UserCmd -> IO ())
 initUserCommand basePath =
+#if MIN_VERSION_network(3,0,0)
+  do profileData <- openRemoteStateSockAddr skipAuthenticationPerform (SockAddrUnix ((basePath </> "profileData_socket")))
+#else
   do profileData <- openRemoteState skipAuthenticationPerform "localhost" (UnixSocket ((basePath </> "profileData_socket")))
+#endif
      pure $ \c -> runReaderT (execUserCommand c) profileData
 
 userCLIHandler :: FilePath -> IO CLIHandler

@@ -10,7 +10,7 @@ let pkg = haskellPackages.callPackage
                isLibrary = false;
                isExecutable = true;
                buildDepends = [
-                 acid-state base clckwrks haskeline mtl network parsec cabal-install
+                 acid-state base  haskeline mtl network parsec cabal-install  clckwrks
                ];
                homepage = "http://www.clckwrks.com/";
                description = "a command-line interface for adminstrating some aspects of clckwrks";

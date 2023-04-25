@@ -4,7 +4,7 @@ module Clckwrks.CLI.ProfileData where
 import Control.Applicative ((<$>), (<*>), (*>), pure)
 import Clckwrks (UserId(..))
 import Clckwrks.CLI.Core (CLIHandler(..))
-import Clckwrks.ProfileData.Acid (ProfileDataState(..), GetProfileData(..), AddRole(..), RemoveRole(..))
+import Clckwrks.ProfileData.Acid (ProfileDataState(..), GetProfileData(..), GetUserIdDisplayNames(..), AddRole(..), RemoveRole(..))
 import Clckwrks.ProfileData.Types (Role(..))
 import Control.Monad.Reader
 import Data.Acid (AcidState)
@@ -48,7 +48,8 @@ main =
 -}
 
 data UserCmd
-    = UCShow UserId
+    = UCList
+    | UCShow UserId
     | UCAddRole UserId Role
     | UCRemoveRole UserId Role
       deriving (Eq, Ord, Read, Show)
@@ -70,11 +71,9 @@ pUserId = UserId <$> (read <$> many1 digit)
 
 pUserCmd :: Parser UserCmd
 pUserCmd =
-{-
        do string "list"
           return UCList
        <|>
--}
        do string "show"
           skipMany1 space
           u <- pUserId
@@ -95,13 +94,11 @@ pUserCmd =
           return (UCRemoveRole u r)
 
 execUserCommand :: UserCmd -> ReaderT (AcidState ProfileDataState) IO ()
-{-
 execUserCommand UCList =
     do a <- ask
-       all <- query' a GetUserIdUsernames
+       all <- query' a GetUserIdDisplayNames
        lift $ print all
        return ()
--}
 execUserCommand (UCShow uid) =
     do a <- ask
        pd <- query' a (GetProfileData uid)

@@ -24,13 +24,16 @@ Library
   Build-depends:
      acid-state >= 0.12 && < 0.17,
      base        < 5,
-     clckwrks   >= 0.23 && < 0.30,
+     clckwrks   >= 0.23 && < 0.31,
      containers >= 0.5 && < 0.7,
      haskeline  >= 0.7 && < 0.9,
      filepath >= 1.4 && < 1.5,
      mtl        >= 2.0 && < 2.3,
      network    >= 2.3 && < 3.2,
-     parsec     == 3.1.*
+     megaparsec,
+     pretty,
+     rebac,
+     text
 
 Executable clckwrks-cli
   Main-is:
@@ -41,11 +44,14 @@ Executable clckwrks-cli
   Build-depends:
      acid-state >= 0.12 && < 0.17,
      base        < 5,
-     clckwrks   >= 0.23 && < 0.30,
+     clckwrks   >= 0.23 && < 0.31,
      clckwrks-cli,
      containers >= 0.5 && < 0.7,
      haskeline  >= 0.7 && < 0.9,
      filepath >= 1.4 && < 1.5,
      mtl        >= 2.0 && < 2.3,
      network    >= 2.3 && < 3.2,
-     parsec     == 3.1.*
+     megaparsec,
+     pretty,
+     rebac,
+     text

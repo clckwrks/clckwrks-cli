@@ -1,7 +1,7 @@
 with (import <nixpkgs> {}).pkgs;
 let pkg = haskellPackages.callPackage
             ({ mkDerivation, acid-state, base, clckwrks, haskeline, mtl
-             , network, parsec, stdenv, cabal-install
+             , network, megaparsec, stdenv, cabal-install
              }:
              mkDerivation {
                pname = "clckwrks-cli";
@@ -10,7 +10,7 @@ let pkg = haskellPackages.callPackage
                isLibrary = false;
                isExecutable = true;
                buildDepends = [
-                 acid-state base  haskeline mtl network parsec cabal-install  clckwrks
+                 acid-state base  haskeline mtl network megaparsec cabal-install  clckwrks
                ];
                homepage = "http://www.clckwrks.com/";
                description = "a command-line interface for adminstrating some aspects of clckwrks";

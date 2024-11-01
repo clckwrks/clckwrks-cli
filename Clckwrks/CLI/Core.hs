@@ -1,4 +1,4 @@
-{-# language ExistentialQuantification #-}
+{-# language ExistentialQuantification, OverloadedStrings #-}
 module Clckwrks.CLI.Core where
 
 import Control.Applicative ((<$>), (<*>), (*>), pure)
@@ -10,11 +10,17 @@ import Data.Acid.Advanced (query', update')
 import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
 import           Data.Map (Map)
 import qualified Data.Map as Map
+import Data.Text (Text)
+import qualified Data.Text as T
+import Data.Void (Void)
 import System.Environment
 import System.Exit (exitSuccess)
 import System.Console.Haskeline
-import Text.Parsec
-import Text.Parsec.String
+import Text.Megaparsec
+import Text.Megaparsec.Char
+import qualified Text.Megaparsec.Char.Lexer as L
+
+type Parser = Parsec Void Text
 
 data CLIHandler = forall cmd. CLIHandler
   { cliPrefix :: String
@@ -58,7 +64,7 @@ loop handlers' =
            _ -> case Map.lookup prefix handlers of
                   Nothing -> liftIO $ putStrLn $ "unknow command prefix: " ++ prefix
                   (Just (CLIHandler _ exec parser _)) ->
-                    do let r = parse parser input rest
+                    do let r = parse parser input (T.pack rest)
                        case r of
                          (Left e) ->
                            do liftIO $ print e

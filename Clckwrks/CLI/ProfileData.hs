@@ -1,9 +1,9 @@
-{-# language CPP #-}
+{-# language CPP, OverloadedStrings #-}
 module Clckwrks.CLI.ProfileData where
 
 import Control.Applicative ((<$>), (<*>), (*>), pure)
 import Clckwrks (UserId(..))
-import Clckwrks.CLI.Core (CLIHandler(..))
+import Clckwrks.CLI.Core (CLIHandler(..), Parser)
 import Clckwrks.ProfileData.Acid (ProfileDataState(..), GetProfileData(..), GetUserIdDisplayNames(..), AddRole(..), RemoveRole(..))
 import Clckwrks.ProfileData.Types (Role(..))
 import Control.Monad.Reader
@@ -20,8 +20,9 @@ import Data.Acid.Remote (openRemoteState, skipAuthenticationPerform)
 import System.Environment
 import System.FilePath ((</>))
 import System.Console.Haskeline
-import Text.Parsec
-import Text.Parsec.String
+import Text.Megaparsec
+import Text.Megaparsec.Char
+import qualified Text.Megaparsec.Char.Lexer as L
 
 -- right now this just connects to the server and makes UserId 1 an administrator
 --
@@ -67,7 +68,7 @@ pRole =
     string "Administrator" *> pure Administrator
 
 pUserId :: Parser UserId
-pUserId = UserId <$> (read <$> many1 digit)
+pUserId = UserId <$> (read <$> some digitChar)
 
 pUserCmd :: Parser UserCmd
 pUserCmd =
@@ -75,21 +76,21 @@ pUserCmd =
           return UCList
        <|>
        do string "show"
-          skipMany1 space
+          skipSome space
           u <- pUserId
           return (UCShow u)
        <|>
        do string "add-role"
-          skipMany1 space
+          skipSome space
           u <- pUserId
-          skipMany1 space
+          skipSome space
           r <- pRole
           return (UCAddRole u r)
        <|>
        do string "remove-role"
-          skipMany1 space
+          skipSome space
           u <- pUserId
-          skipMany1 space
+          skipSome space
           r <- pRole
           return (UCRemoveRole u r)
 

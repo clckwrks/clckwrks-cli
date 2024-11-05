@@ -10,9 +10,12 @@ main :: IO ()
 main =
   do args <- getArgs
      case args of
-       [basePath] ->
-         do u <- userCLIHandler basePath
-            r <- rebacCLIHandler basePath
+       (basePath:rest) ->
+         do let mSchemaPath = case rest of
+                             []    -> Nothing
+                             [pth] -> Just pth
+            u <- userCLIHandler basePath
+            r <- rebacCLIHandler basePath mSchemaPath
             loop [u, r]
             putStrLn "type 'help' for a list of commands."
-       _ -> putStrLn "Usage: clckwrks-cli path/to/_state"
+       _ -> putStrLn "Usage: clckwrks-cli path/to/_state [path to rebac schema]"

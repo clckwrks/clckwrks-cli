@@ -11,7 +11,7 @@ import AccessControl.Schema (Schema(definitions), Permission(..), parseSchema, p
 import Control.Applicative ((<$>), (<*>), (*>), pure)
 import Clckwrks (UserId(..))
 import Clckwrks.CLI.Core (CLIHandler(..), Parser)
-import Clckwrks.Rebac.Acid (AddRelationTuple(..), RebacState, GetRelationTuples(..), GetRelationLog(..), RLEAction(..), RelationLogEntry(..), RemoveRelationTuple(..))
+import Clckwrks.Rebac.Acid (AddRelationTuple(..), RebacState, GetRelationTuples(..), GetRelationLog(..), RLEAction(..), RelationLogEntry(..), RemoveRelationTuple(..), ppRelationTxId)
 import Control.Monad.Reader
 import Data.Acid (AcidState)
 import Data.Acid.Advanced (query', update')
@@ -136,8 +136,8 @@ pRebacCmd =
             pure (RCHasRelation rel)
        ]
 
-ppRelationLogEntry (RelationLogEntry timestamp relationTuple action comment) =
-  PP.text (show timestamp) <+> ppAction action <+> ppRelationTuple relationTuple <+> PP.text (T.unpack comment)
+ppRelationLogEntry (RelationLogEntry timestamp relationTuple action comment txId) =
+  PP.text (show timestamp) <+> ppAction action <+> ppRelationTuple relationTuple <+> ppRelationTxId txId <+> PP.text (T.unpack comment)
   where
     ppAction RLEAdd    = PP.text "+"
     ppAction RLERemove = PP.text "-"

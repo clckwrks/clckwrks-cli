@@ -21,6 +21,7 @@ Library
   default-language: Haskell2010
   Exposed-Modules: Clckwrks.CLI.Core
                    Clckwrks.CLI.ProfileData
+                   Clckwrks.CLI.Rebac
   Build-depends:
      acid-state >= 0.12 && < 0.17,
      base        < 5,
@@ -43,6 +44,7 @@ Executable clckwrks-cli
   Default-Language: Haskell2010
   Other-Modules: Clckwrks.CLI.Core
                  Clckwrks.CLI.ProfileData
+                 Clckwrks.CLI.Rebac
   Build-depends:
      acid-state >= 0.12 && < 0.17,
      base        < 5,

@@ -1,17 +1,18 @@
 {-# language DataKinds, OverloadedStrings #-}
 module Clckwrks.CLI.Rebac where
 
-import AccessControl.Check (RelPerm, check, lookupSubjects, lookupSubjectsWithType, mkDefMap)
+import AccessControl.Check (check, lookupSubjects, lookupSubjectsWithType)
 import AccessControl.Relation ( Relation, RelationTuple(..), Object(..), ObjectType(..), ObjectWildcard(..)
                               , hasRelation, hasResource, hasResourceType, hasSubject, hasSubjectType
                               , pObject, pObjectType, pObjectWild, pRelation, pRelationTuple
                               , ppRelationTuple, ppRelationTuples
                               )
 import AccessControl.Schema (Schema(definitions), Permission(..), parseSchema, pPermission)
+import AccessControl.Validate (RelPerm(..), mkDefMap)
 import Control.Applicative ((<$>), (<*>), (*>), pure)
 import Clckwrks (UserId(..))
 import Clckwrks.CLI.Core (CLIHandler(..), Parser)
-import Clckwrks.Rebac.Acid (AddRelationTuple(..), RebacState, GetRelationTuples(..), GetRelationLog(..), RLEAction(..), RelationLogEntry(..), RemoveRelationTuple(..), ppRelationTxId)
+import Clckwrks.Rebac.Acid (AddRelationTuple(..), RebacState, GetRelationTuples(..), GetRelationLog(..), RLEAction(..), RelationLogEntry(..), RemoveRelationTuple(..), ppAddRelationTupleError, ppRelationTxId)
 import Control.Monad.Reader
 import Data.Acid (AcidState)
 import Data.Acid.Advanced (query', update')
@@ -21,6 +22,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as T
 import Data.Time.Clock              (getCurrentTime)
+import Data.Time.Clock.POSIX (getPOSIXTime)
 import Network.Socket (SockAddr(..))
 import Data.Acid.Remote (openRemoteStateSockAddr, skipAuthenticationPerform)
 import qualified Data.Text as T
@@ -157,8 +159,12 @@ execRebacCommand RCRelationTuples _ =
 execRebacCommand (RCAddRelationTuple rt comment) _ =
   do a <- ask
      now <- liftIO getCurrentTime
-     e <- update' a (AddRelationTuple rt now comment)
-     liftIO $ print $ ppRelationLogEntry e
+     r <- update' a (AddRelationTuple rt now comment)
+     case r of
+       (Left err) ->
+         do liftIO $ print $ ppAddRelationTupleError err
+       (Right entry) ->
+         liftIO $ print $ ppRelationLogEntry entry
 execRebacCommand (RCRemoveRelationTuple rt comment) _ =
   do a <- ask
      now <- liftIO getCurrentTime
@@ -169,7 +175,8 @@ execRebacCommand (RCCheck resource perm subject) Nothing =
 execRebacCommand (RCCheck resource perm subject) (Just rsDefMap) =
   do a <- ask
      rts <- query' a GetRelationTuples
-     let access = check rsDefMap rts resource perm subject
+     now <- liftIO $ getPOSIXTime
+     let access = check rsDefMap rts resource perm subject (Just now)
      liftIO $ print access
 execRebacCommand (RCHasSubjectType st) _ =
   do a <- ask
